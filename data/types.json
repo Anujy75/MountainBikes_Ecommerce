@@ -1,0 +1,44 @@
+[
+  {
+    "id": "trail",
+    "name": "Trail",
+    "slug": "trail",
+    "description": "Versatile all-terrain bikes built for mixed riding and aggressive descents.",
+    "featured": true
+  },
+  {
+    "id": "enduro",
+    "name": "Enduro",
+    "slug": "enduro",
+    "description": "Durable long-range bikes engineered for technical terrain and big descents.",
+    "featured": true
+  },
+  {
+    "id": "cross-country",
+    "name": "Cross-Country",
+    "slug": "cross-country",
+    "description": "Lightweight and efficient bikes optimized for speed and climbing.",
+    "featured": true
+  },
+  {
+    "id": "downhill",
+    "name": "Downhill",
+    "slug": "downhill",
+    "description": "High-performance bikes designed for maximum stability on steep terrain.",
+    "featured": true
+  },
+  {
+    "id": "gravel",
+    "name": "Gravel",
+    "slug": "gravel",
+    "description": "Versatile bikes for mixed terrain and long-distance adventures.",
+    "featured": false
+  },
+  {
+    "id": "fat-bike",
+    "name": "Fat Bike",
+    "slug": "fat-bike",
+    "description": "All-terrain bikes with wide tires for snow, sand, and extreme conditions.",
+    "featured": false
+  }
+]

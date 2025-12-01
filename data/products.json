@@ -1,0 +1,104 @@
+[
+  {
+    "id": "scout-29",
+    "name": "Scout 29",
+    "type": "Trail",
+    "brand": "PeakRide",
+    "wheel_size": 29,
+    "price": 2499,
+    "images": ["/images/scout-1.jpg", "/images/scout-2.jpg", "/images/scout-3.jpg"],
+    "specs": {
+      "Frame": "Alloy 6061, 430g",
+      "Fork": "120mm Travel, Lockout",
+      "Brakes": "Hydraulic Disc",
+      "Drivetrain": "12-speed Shimano",
+      "Wheels": "29in DH Rims"
+    },
+    "description": "Responsive trail machine built for mixed terrain and aggressive descents."
+  },
+  {
+    "id": "ridge-pro",
+    "name": "Ridge Pro",
+    "type": "Enduro",
+    "brand": "PeakRide",
+    "wheel_size": 27.5,
+    "price": 3299,
+    "images": ["/images/ridge-1.jpg", "/images/ridge-2.jpg"],
+    "specs": {
+      "Frame": "Carbon, 380g",
+      "Fork": "160mm Travel, Adjustable",
+      "Brakes": "Hydraulic Disc, 200mm Rotor",
+      "Drivetrain": "12-speed SRAM Eagle",
+      "Wheels": "27.5in Carbon Rims"
+    },
+    "description": "Lightweight enduro machine engineered for long descents and technical terrain."
+  },
+  {
+    "id": "swift-xc",
+    "name": "Swift XC",
+    "type": "Cross-Country",
+    "brand": "PeakRide",
+    "wheel_size": 29,
+    "price": 1899,
+    "images": ["/images/swift-1.jpg", "/images/swift-2.jpg"],
+    "specs": {
+      "Frame": "Alloy 6061, 450g",
+      "Fork": "90mm Travel",
+      "Brakes": "Hydraulic Disc",
+      "Drivetrain": "12-speed Shimano",
+      "Wheels": "29in XC Rims"
+    },
+    "description": "Fast and efficient cross-country racer built for competitive climbing and speed."
+  },
+  {
+    "id": "descent-dh",
+    "name": "Descent DH",
+    "type": "Downhill",
+    "brand": "PeakRide",
+    "wheel_size": 27.5,
+    "price": 4199,
+    "images": ["/images/descent-1.jpg", "/images/descent-2.jpg"],
+    "specs": {
+      "Frame": "Carbon, 360g",
+      "Fork": "200mm Travel, Dual Crown",
+      "Brakes": "Hydraulic Disc, 220mm Rotor",
+      "Drivetrain": "12-speed SRAM Eagle",
+      "Wheels": "27.5in DH Carbon Rims"
+    },
+    "description": "Downhill beast engineered for maximum stability and control on steep terrain."
+  },
+  {
+    "id": "apex-gravel",
+    "name": "Apex Gravel",
+    "type": "Gravel",
+    "brand": "PeakRide",
+    "wheel_size": 650,
+    "price": 1499,
+    "images": ["/images/apex-1.jpg", "/images/apex-2.jpg"],
+    "specs": {
+      "Frame": "Steel 4130, 500g",
+      "Fork": "Steel, 50mm Travel",
+      "Brakes": "Hydraulic Disc",
+      "Drivetrain": "11-speed Shimano",
+      "Wheels": "650c Gravel Rims"
+    },
+    "description": "Versatile gravel bike for mixed terrain and long-distance adventures."
+  },
+  {
+    "id": "nomad-fat",
+    "name": "Nomad Fat",
+    "type": "Fat Bike",
+    "brand": "PeakRide",
+    "wheel_size": 26,
+    "price": 2199,
+    "images": ["/images/nomad-1.jpg", "/images/nomad-2.jpg"],
+    "specs": {
+      "Frame": "Alloy 6061, 580g",
+      "Fork": "120mm Travel",
+      "Brakes": "Hydraulic Disc",
+      "Drivetrain": "12-speed Shimano",
+      "Wheels": "26in Fat Rims, 4.0in Tires"
+    },
+    "description": "All-terrain fat bike for snow, sand, and extreme conditions."
+  }
+]

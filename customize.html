@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bike Customizer – PeakRide</title>
+  <meta name="description" content="Design your perfect mountain bike with PeakRide's advanced customizer.">
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    /* Customizer-specific styles */
+    .customizer-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      .customizer-wrapper {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    .customizer-stepper {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .stepper-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .stepper-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border: 1px solid #333;
+      cursor: pointer;
+      transition: all 250ms ease-in-out;
+      position: relative;
+    }
+
+    .stepper-step.active {
+      background-color: #333;
+      border-color: #fff;
+    }
+
+    .stepper-step.completed {
+      opacity: 0.6;
+    }
+
+    .stepper-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #333;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .stepper-step.active .stepper-number {
+      background-color: #fff;
+      color: #000;
+    }
+
+    .stepper-step.completed .stepper-number {
+      background-color: #666;
+    }
+
+    .stepper-label {
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stepper-content {
+      padding: 2rem;
+      border: 1px solid #333;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stepper-content h3 {
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      flex: 1;
+      margin-bottom: 1.5rem;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      border: 1px solid #333;
+      cursor: pointer;
+      transition: all 250ms ease-in-out;
+    }
+
+    .option-label:hover {
+      background-color: #333;
+    }
+
+    .option-label input[type="radio"],
+    .option-label input[type="checkbox"] {
+      margin-right: 1rem;
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+    }
+
+    .option-label span {
+      flex: 1;
+      font-weight: 500;
+    }
+
+    .price-delta {
+      font-weight: 600;
+      color: #a0a0a0;
+      font-size: 0.875rem;
+    }
+
+    .stepper-controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+      margin-top: auto;
+    }
+
+    .stepper-controls button {
+      flex: 1;
+    }
+
+    .customizer-preview {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      position: sticky;
+      top: 100px;
+    }
+
+    @media (max-width: 1024px) {
+      .customizer-preview {
+        position: static;
+      }
+    }
+
+    .preview-image {
+      width: 100%;
+      aspect-ratio: 1;
+      background-color: #333;
+      border: 1px solid #333;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preview-summary {
+      border: 1px solid #333;
+      padding: 1.5rem;
+    }
+
+    .summary-section {
+      margin-bottom: 1rem;
+    }
+
+    .summary-section:last-child {
+      margin-bottom: 0;
+      border-top: 1px solid #333;
+      padding-top: 1rem;
+    }
+
+    .summary-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #a0a0a0;
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+    }
+
+    .summary-value {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .customizer-price {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .preview-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .preview-actions .btn {
+      width: 100%;
+    }
+
+    @media (max-width: 600px) {
+      .customizer-wrapper {
+        gap: 1.5rem;
+      }
+
+      .stepper-step {
+        padding: 0.75rem;
+      }
+
+      .stepper-label {
+        font-size: 0.75rem;
+      }
+
+      .stepper-content {
+        min-height: 300px;
+        padding: 1.5rem;
+      }
+
+      .options-grid {
+        gap: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Navigation -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">PEAKRIDE</div>
+        
+        <nav class="nav-main">
+          <li><a href="/index.html">Home</a></li>
+          <li><a href="/bikes.html">Bikes</a></li>
+          <li><a href="/customize.html">Customize</a></li>
+          <li><a href="/cart.html">Cart</a></li>
+        </nav>
+        
+        <div class="header-actions">
+          <div class="search-icon" role="button" tabindex="0" aria-label="Search">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </div>
+          
+          <div style="position: relative;">
+            <a href="/cart.html" class="cart-icon" aria-label="View cart">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+            </a>
+            <div class="cart-badge" style="display: none;">0</div>
+          </div>
+        </div>
+        
+        <button class="nav-toggle" aria-label="Toggle navigation menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <div class="container py-2xl">
+    <h1 style="margin-bottom: 0.5rem;">Build Your Perfect Bike</h1>
+    <p style="color: #a0a0a0; margin-bottom: 2rem;">Customize every component to match your riding style.</p>
+
+    <div class="customizer-wrapper">
+      <!-- Stepper & Content -->
+      <div class="customizer-stepper">
+        <div class="stepper-steps" id="stepper-steps"></div>
+        <div class="stepper-content" id="stepper-content"></div>
+        
+        <div class="stepper-controls">
+          <button class="btn btn-secondary" id="prev-step" style="display: none;">← Previous</button>
+          <button class="btn" id="next-step">Next Step →</button>
+        </div>
+      </div>
+
+      <!-- Preview & Summary -->
+      <div class="customizer-preview">
+        <div class="preview-image">
+          <img id="preview-image" src="/placeholder.svg" alt="Bike preview" loading="lazy">
+        </div>
+
+        <div class="preview-summary">
+          <div class="summary-section">
+            <div class="summary-label">Model</div>
+            <div class="summary-value" id="summary-model">Loading...</div>
+          </div>
+          <div class="summary-section" id="summary-selections"></div>
+          <div class="summary-section">
+            <div class="summary-label">Total Price</div>
+            <div class="customizer-price">$0</div>
+          </div>
+        </div>
+
+        <div class="preview-actions">
+          <button class="btn" id="add-to-cart-final">Add to Cart</button>
+          <button class="btn btn-secondary" id="save-template">Save as Template</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="/bikes.html">All Bikes</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Customize</h4>
+          <ul>
+            <li><a href="/customize.html">Build Your Bike</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Cart</h4>
+          <ul>
+            <li><a href="/cart.html">Shopping Cart</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2025 PeakRide. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/app.js"></script>
+  <script src="/js/cart.js"></script>
+  <script src="/js/customizer.js"></script>
+  <script>
+    let currentProduct = null;
+    let currentCustomizations = {
+      frame: '',
+      wheels: '',
+      suspension: '',
+      brakes: '',
+      extras: []
+    };
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        // Get product ID from URL or use first product
+        const params = new URLSearchParams(window.location.search);
+        const productId = params.get('id');
+
+        const response = await fetch('/data/products.json');
+        const products = await response.json();
+        currentProduct = productId ? products.find(p => p.id === productId) : products[0];
+
+        if (!currentProduct) {
+          currentProduct = products[0];
+        }
+
+        document.getElementById('preview-image').src = currentProduct.images[0];
+        document.getElementById('summary-model').textContent = currentProduct.name;
+
+        // Initialize customizer
+        customizer.init(currentProduct.price);
+        renderCustomizer();
+      } catch (error) {
+        console.error('[v0] Error loading customizer:', error);
+      }
+    });
+
+    function renderCustomizer() {
+      const stepsContainer = document.getElementById('stepper-steps');
+      stepsContainer.innerHTML = customizer.steps.map((step, i) => `
+        <div class="stepper-step ${i + 1 === customizer.currentStep ? 'active' : ''} ${i + 1 < customizer.currentStep ? 'completed' : ''}" onclick="goToStep(${i + 1})">
+          <div class="stepper-number">${i + 1}</div>
+          <div class="stepper-label">${step}</div>
+        </div>
+      `).join('');
+
+      renderStepContent();
+      updateSummary();
+      updateButtons();
+    }
+
+    function renderStepContent() {
+      const step = customizer.steps[customizer.currentStep - 1];
+      const contentContainer = document.getElementById('stepper-content');
+
+      let content = '';
+
+      switch (step) {
+        case 'Frame':
+          content = `
+            <h3>Select Frame Material</h3>
+            <div class="options-grid">
+              ${Object.keys(customizer.priceModifiers.frame).map(option => `
+                <label class="option-label">
+                  <input type="radio" name="frame" value="${option}" ${customizer.customOptions.frame === option ? 'checked' : ''} onchange="updateOption('frame', this.value)">
+                  <span>${option}</span>
+                  <span class="price-delta">+$${customizer.priceModifiers.frame[option]}</span>
+                </label>
+              `).join('')}
+            </div>
+          `;
+          break;
+        case 'Wheels':
+          content = `
+            <h3>Select Wheel Size</h3>
+            <div class="options-grid">
+              ${Object.keys(customizer.priceModifiers.wheels).map(option => `
+                <label class="option-label">
+                  <input type="radio" name="wheels" value="${option}" ${customizer.customOptions.wheels === option ? 'checked' : ''} onchange="updateOption('wheels', this.value)">
+                  <span>${option}</span>
+                  <span class="price-delta">+$${customizer.priceModifiers.wheels[option]}</span>
+                </label>
+              `).join('')}
+            </div>
+          `;
+          break;
+        case 'Suspension':
+          content = `
+            <h3>Select Suspension Travel</h3>
+            <div class="options-grid">
+              ${Object.keys(customizer.priceModifiers.suspension).map(option => `
+                <label class="option-label">
+                  <input type="radio" name="suspension" value="${option}" ${customizer.customOptions.suspension === option ? 'checked' : ''} onchange="updateOption('suspension', this.value)">
+                  <span>${option}</span>
+                  <span class="price-delta">+$${customizer.priceModifiers.suspension[option]}</span>
+                </label>
+              `).join('')}
+            </div>
+          `;
+          break;
+        case 'Brakes':
+          content = `
+            <h3>Select Brake Type</h3>
+            <div class="options-grid">
+              ${Object.keys(customizer.priceModifiers.brakes).map(option => `
+                <label class="option-label">
+                  <input type="radio" name="brakes" value="${option}" ${customizer.customOptions.brakes === option ? 'checked' : ''} onchange="updateOption('brakes', this.value)">
+                  <span>${option}</span>
+                  <span class="price-delta">+$${customizer.priceModifiers.brakes[option]}</span>
+                </label>
+              `).join('')}
+            </div>
+          `;
+          break;
+        case 'Extras':
+          content = `
+            <h3>Add Extras (Optional)</h3>
+            <div class="options-grid">
+              ${Object.keys(customizer.priceModifiers.extras).map(option => `
+                <label class="option-label">
+                  <input type="checkbox" name="extras" value="${option}" ${customizer.customOptions.extras.includes(option) ? 'checked' : ''} onchange="updateExtras(this.value, this.checked)">
+                  <span>${option}</span>
+                  <span class="price-delta">+$${customizer.priceModifiers.extras[option]}</span>
+                </label>
+              `).join('')}
+            </div>
+          `;
+          break;
+      }
+
+      contentContainer.innerHTML = content;
+    }
+
+    function updateOption(key, value) {
+      customizer.customOptions[key] = value;
+      customizer.updatePrice();
+      updateSummary();
+    }
+
+    function updateExtras(value, checked) {
+      if (checked) {
+        customizer.customOptions.extras.push(value);
+      } else {
+        customizer.customOptions.extras = customizer.customOptions.extras.filter(e => e !== value);
+      }
+      customizer.updatePrice();
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const summary = document.getElementById('summary-selections');
+      const summaryItems = [];
+
+      if (customizer.customOptions.frame) summaryItems.push(`<div><strong>Frame:</strong> ${customizer.customOptions.frame}</div>`);
+      if (customizer.customOptions.wheels) summaryItems.push(`<div><strong>Wheels:</strong> ${customizer.customOptions.wheels}</div>`);
+      if (customizer.customOptions.suspension) summaryItems.push(`<div><strong>Suspension:</strong> ${customizer.customOptions.suspension}</div>`);
+      if (customizer.customOptions.brakes) summaryItems.push(`<div><strong>Brakes:</strong> ${customizer.customOptions.brakes}</div>`);
+      if (customizer.customOptions.extras.length > 0) {
+        summaryItems.push(`<div><strong>Extras:</strong> ${customizer.customOptions.extras.join(', ')}</div>`);
+      }
+
+      summary.innerHTML = summaryItems.length > 0 ? summaryItems.join('') : '<p style="color: #a0a0a0; font-size: 0.875rem;">No options selected yet</p>';
+    }
+
+    function updateButtons() {
+      document.getElementById('prev-step').style.display = customizer.currentStep > 1 ? 'block' : 'none';
+      document.getElementById('next-step').textContent = customizer.currentStep === customizer.steps.length ? 'Complete' : 'Next Step →';
+    }
+
+    function goToStep(step) {
+      if (step <= customizer.currentStep) {
+        customizer.currentStep = step;
+        renderCustomizer();
+      }
+    }
+
+    document.getElementById('next-step').addEventListener('click', () => {
+      if (customizer.currentStep < customizer.steps.length) {
+        customizer.currentStep++;
+        renderCustomizer();
+      }
+    });
+
+    document.getElementById('prev-step').addEventListener('click', () => {
+      if (customizer.currentStep > 1) {
+        customizer.currentStep--;
+        renderCustomizer();
+      }
+    });
+
+    document.getElementById('add-to-cart-final').addEventListener('click', () => {
+      const customizationData = {
+        frame: customizer.customOptions.frame || 'Default',
+        wheels: customizer.customOptions.wheels || 'Default',
+        suspension: customizer.customOptions.suspension || 'Default',
+        brakes: customizer.customOptions.brakes || 'Default',
+        extras: customizer.customOptions.extras
+      };
+      cart.addItem(currentProduct, customizationData);
+      alert(`Your custom ${currentProduct.name} has been added to cart!`);
+    });
+
+    document.getElementById('save-template').addEventListener('click', () => {
+      const template = {
+        productId: currentProduct.id,
+        productName: currentProduct.name,
+        customizations: customizer.customOptions
+      };
+      const templates = JSON.parse(localStorage.getItem('peakride_templates') || '[]');
+      templates.push({ ...template, savedAt: new Date().toISOString() });
+      localStorage.setItem('peakride_templates', JSON.stringify(templates));
+      alert('Template saved! You can load it later from your profile.');
+    });
+  </script>
+</body>
+</html>

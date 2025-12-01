@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details – PeakRide</title>
+  <meta name="description" content="View detailed specifications and customize your PeakRide mountain bike.">
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    /* Product detail styles */
+    .product-detail-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .product-detail-wrapper {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    .product-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .product-gallery-main {
+      width: 100%;
+      aspect-ratio: 1;
+      background-color: #333;
+      overflow: hidden;
+      border: 1px solid #333;
+    }
+
+    .product-gallery-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-gallery-thumbnails {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+    }
+
+    .product-gallery-thumbnail {
+      aspect-ratio: 1;
+      border: 1px solid #333;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 250ms ease-in-out;
+    }
+
+    .product-gallery-thumbnail.active {
+      border-color: #fff;
+    }
+
+    .product-gallery-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-detail-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-detail-brand {
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #a0a0a0;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-detail-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      letter-spacing: -0.03em;
+    }
+
+    .product-detail-description {
+      color: #a0a0a0;
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+    }
+
+    .product-detail-price {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-detail-specs {
+      border-top: 1px solid #333;
+      border-bottom: 1px solid #333;
+      padding: 1.5rem 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .spec-row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 2rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #333;
+    }
+
+    .spec-row:last-child {
+      border-bottom: none;
+    }
+
+    .spec-label {
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.875rem;
+      letter-spacing: 0.05em;
+      color: #a0a0a0;
+    }
+
+    .spec-value {
+      font-size: 1rem;
+    }
+
+    .product-detail-actions {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .product-detail-actions .btn {
+      flex: 1;
+    }
+
+    .product-detail-info > p {
+      font-size: 0.875rem;
+      color: #a0a0a0;
+      margin-top: auto;
+    }
+
+    @media (max-width: 600px) {
+      .product-detail-wrapper {
+        gap: 1.5rem;
+      }
+
+      .product-gallery-thumbnails {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .product-detail-title {
+        font-size: 1.75rem;
+      }
+
+      .product-detail-price {
+        font-size: 1.5rem;
+      }
+
+      .product-detail-actions {
+        flex-direction: column;
+      }
+
+      .spec-row {
+        grid-template-columns: 100px 1fr;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Navigation -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">PEAKRIDE</div>
+        
+        <nav class="nav-main">
+          <li><a href="/index.html">Home</a></li>
+          <li><a href="/bikes.html">Bikes</a></li>
+          <li><a href="/customize.html">Customize</a></li>
+          <li><a href="/cart.html">Cart</a></li>
+        </nav>
+        
+        <div class="header-actions">
+          <div class="search-icon" role="button" tabindex="0" aria-label="Search">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </div>
+          
+          <div style="position: relative;">
+            <a href="/cart.html" class="cart-icon" aria-label="View cart">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+            </a>
+            <div class="cart-badge" style="display: none;">0</div>
+          </div>
+        </div>
+        
+        <button class="nav-toggle" aria-label="Toggle navigation menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumb -->
+  <div class="container" style="padding-top: 1.5rem;">
+    <a href="/bikes.html" style="color: #a0a0a0; font-size: 0.875rem;">← Back to Catalog</a>
+  </div>
+
+  <!-- Product Detail -->
+  <div class="container py-2xl">
+    <div class="product-detail-wrapper">
+      <!-- Gallery -->
+      <div class="product-gallery">
+        <div class="product-gallery-main">
+          <img id="main-image" src="/placeholder.svg" alt="Product image" loading="lazy">
+        </div>
+        <div class="product-gallery-thumbnails" id="thumbnails"></div>
+      </div>
+
+      <!-- Product Info -->
+      <div class="product-detail-info">
+        <div class="product-detail-brand" id="product-brand"></div>
+        <h1 class="product-detail-title" id="product-name"></h1>
+        <p class="product-detail-description" id="product-description"></p>
+        
+        <div class="product-detail-price" id="product-price"></div>
+
+        <!-- Specs -->
+        <div class="product-detail-specs" id="specs-container"></div>
+
+        <!-- Actions -->
+        <div class="product-detail-actions">
+          <button class="btn" id="add-to-cart-btn">Add to Cart</button>
+          <a href="" class="btn btn-secondary" id="customize-btn">Customize</a>
+        </div>
+
+        <p>Free shipping on orders over $500. Ships within 3-5 business days.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Products -->
+  <section class="container py-2xl" style="border-top: 1px solid #333;">
+    <h2 class="mb-xl">Related Products</h2>
+    <div class="products-grid grid grid-4" id="related-products"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="/bikes.html">All Bikes</a></li>
+            <li><a href="/bikes/trail.html">Trail Bikes</a></li>
+            <li><a href="/bikes/enduro.html">Enduro Bikes</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Customize</h4>
+          <ul>
+            <li><a href="/customize.html">Build Your Bike</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Account</h4>
+          <ul>
+            <li><a href="/cart.html">Shopping Cart</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2025 PeakRide. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/app.js"></script>
+  <script src="/js/cart.js"></script>
+  <script>
+    // Product detail page logic
+    let currentProduct = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        // Get product ID from URL
+        const params = new URLSearchParams(window.location.search);
+        const productId = params.get('id');
+
+        if (!productId) {
+          window.location.href = '/bikes.html';
+          return;
+        }
+
+        // Fetch products
+        const response = await fetch('/data/products.json');
+        const products = await response.json();
+        currentProduct = products.find(p => p.id === productId);
+
+        if (!currentProduct) {
+          window.location.href = '/bikes.html';
+          return;
+        }
+
+        // Populate product details
+        document.getElementById('product-brand').textContent = currentProduct.brand;
+        document.getElementById('product-name').textContent = currentProduct.name;
+        document.getElementById('product-description').textContent = currentProduct.description;
+        document.getElementById('product-price').textContent = `$${currentProduct.price.toLocaleString()}`;
+        document.getElementById('main-image').src = currentProduct.images[0];
+        document.getElementById('customize-btn').href = `/customize.html?id=${currentProduct.id}`;
+
+        // Render thumbnails
+        const thumbnailsContainer = document.getElementById('thumbnails');
+        thumbnailsContainer.innerHTML = currentProduct.images.map((img, index) => `
+          <div class="product-gallery-thumbnail ${index === 0 ? 'active' : ''}" onclick="switchImage(${index})">
+            <img src="${img}" alt="Product image ${index + 1}" loading="lazy">
+          </div>
+        `).join('');
+
+        // Render specs
+        const specsContainer = document.getElementById('specs-container');
+        specsContainer.innerHTML = Object.entries(currentProduct.specs).map(([label, value]) => `
+          <div class="spec-row">
+            <div class="spec-label">${label}</div>
+            <div class="spec-value">${value}</div>
+          </div>
+        `).join('');
+
+        // Add to cart button
+        document.getElementById('add-to-cart-btn').addEventListener('click', () => {
+          cart.addItem(currentProduct);
+          alert(`${currentProduct.name} added to cart!`);
+        });
+
+        // Related products
+        const relatedProducts = products.filter(p => p.type === currentProduct.type && p.id !== currentProduct.id).slice(0, 4);
+        const relatedContainer = document.getElementById('related-products');
+        relatedContainer.innerHTML = relatedProducts.map(product => `
+          <div class="product-card">
+            <div class="product-image">
+              <img src="${product.images[0]}" alt="${product.name}" loading="lazy">
+            </div>
+            <div class="product-info">
+              <span class="product-type">${product.type}</span>
+              <h3 class="product-name">${product.name}</h3>
+              <div class="product-price">$${product.price.toLocaleString()}</div>
+              <div class="product-actions">
+                <a href="/product.html?id=${product.id}" class="btn btn-secondary btn-small">Quick View</a>
+                <a href="/customize.html?id=${product.id}" class="btn btn-small">Customize</a>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      } catch (error) {
+        console.error('[v0] Error loading product:', error);
+      }
+    });
+
+    function switchImage(index) {
+      document.querySelectorAll('.product-gallery-thumbnail').forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === index);
+      });
+      document.getElementById('main-image').src = currentProduct.images[index];
+    }
+  </script>
+</body>
+</html>

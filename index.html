@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PeakRide – Premium Mountain Bikes</title>
+  <meta name="description" content="Experience elite mountain bikes engineered for performance. Explore PeakRide's premium collection of trail, enduro, downhill, and cross-country bikes.">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <!-- Header Navigation -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">PEAKRIDE</div>
+        
+        <nav class="nav-main">
+          <li><a href="/index.html">Home</a></li>
+          <li><a href="/bikes.html">Bikes</a></li>
+          <li><a href="/customize.html">Customize</a></li>
+          <li><a href="/cart.html">Cart</a></li>
+        </nav>
+        
+        <div class="header-actions">
+          <div class="search-icon" role="button" tabindex="0" aria-label="Search">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </div>
+          
+          <div style="position: relative;">
+            <a href="/cart.html" class="cart-icon" aria-label="View cart">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+            </a>
+            <div class="cart-badge" style="display: none;">0</div>
+          </div>
+        </div>
+        
+        <button class="nav-toggle" aria-label="Toggle navigation menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>Precision Engineering Meets Mountain Adventure</h1>
+      <p class="hero-tagline">Engineered for Peak Performance. Built for All Terrain.</p>
+      <div class="hero-cta">
+        <a href="/bikes.html" class="btn">Explore Bikes</a>
+        <a href="/customize.html" class="btn btn-secondary">Customize Yours</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Bikes Section -->
+  <section class="container py-2xl">
+    <h2 class="mb-xl">Featured Collection</h2>
+    <div class="grid grid-4">
+      <!-- Featured bikes will be injected here by JS -->
+      <div class="placeholder" style="text-align: center; padding: 2rem; color: #a0a0a0;">Loading featured bikes...</div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="container py-2xl">
+    <h2 class="mb-xl">Shop by Category</h2>
+    <div class="grid grid-2">
+      <!-- Categories will be injected here by JS -->
+      <div class="placeholder" style="text-align: center; padding: 2rem; color: #a0a0a0;">Loading categories...</div>
+    </div>
+  </section>
+
+  <!-- Highlights Section -->
+  <section class="container py-2xl" style="border-top: 1px solid #333;">
+    <div class="grid grid-3">
+      <div>
+        <h3>Premium Materials</h3>
+        <p style="color: #a0a0a0; margin-top: 1rem;">Aircraft-grade alloy and carbon fiber construction for lightweight durability.</p>
+      </div>
+      <div>
+        <h3>Full Customization</h3>
+        <p style="color: #a0a0a0; margin-top: 1rem;">Build your perfect ride with our modular component selection system.</p>
+      </div>
+      <div>
+        <h3>Expert Support</h3>
+        <p style="color: #a0a0a0; margin-top: 1rem;">Direct access to our engineering team for technical consultation and setup.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="/bikes.html">All Bikes</a></li>
+            <li><a href="/bikes/trail.html">Trail Bikes</a></li>
+            <li><a href="/bikes/enduro.html">Enduro Bikes</a></li>
+            <li><a href="/bikes/cross-country.html">XC Bikes</a></li>
+            <li><a href="/bikes/downhill.html">DH Bikes</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Customize</h4>
+          <ul>
+            <li><a href="/customize.html">Build Your Bike</a></li>
+            <li><a href="/customize.html">Frame Selector</a></li>
+            <li><a href="/customize.html">Component Options</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Account</h4>
+          <ul>
+            <li><a href="/account.html">My Profile</a></li>
+            <li><a href="/account.html">Order History</a></li>
+            <li><a href="/cart.html">Shopping Cart</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#">Shipping Info</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2025 PeakRide. All rights reserved.</span>
+        <div style="display: flex; gap: 2rem;">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/app.js"></script>
+  <script src="/js/cart.js"></script>
+  <script>
+    // Homepage-specific: load and display featured bikes
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const response = await fetch('/data/products.json');
+        const products = await response.json();
+        const featured = products.slice(0, 4); // First 4 as featured
+
+        const container = document.querySelector('.grid-4');
+        container.innerHTML = featured.map(product => `
+          <div class="product-card">
+            <div class="product-image">
+              <img src="${product.images[0]}" alt="${product.name}" loading="lazy">
+            </div>
+            <div class="product-info">
+              <span class="product-type">${product.type}</span>
+              <h3 class="product-name">${product.name}</h3>
+              <div class="product-price">$${product.price.toLocaleString()}</div>
+              <div class="product-actions">
+                <a href="/product.html?id=${product.id}" class="btn btn-secondary btn-small">Quick View</a>
+                <a href="/customize.html?id=${product.id}" class="btn btn-small">Customize</a>
+              </div>
+            </div>
+          </div>
+        `).join('');
+
+        // Load categories
+        const typesResponse = await fetch('/data/types.json');
+        const types = await typesResponse.json();
+        const categories = types.slice(0, 6);
+
+        const categoriesContainer = document.querySelector('.grid-2');
+        const nextGridElement = document.querySelectorAll('.grid-2')[0];
+        nextGridElement.innerHTML = categories.map(type => `
+          <a href="/bikes/${type.slug}.html" style="display: block; padding: 2rem; border: 1px solid #333; text-decoration: none; transition: all 250ms ease-in-out;">
+            <h3 style="margin-bottom: 0.5rem;">${type.name}</h3>
+            <p style="color: #a0a0a0; font-size: 0.875rem;">${type.description}</p>
+          </a>
+        `).join('');
+      } catch (error) {
+        console.error('[v0] Error loading featured content:', error);
+      }
+    });
+  </script>
+</body>
+</html>

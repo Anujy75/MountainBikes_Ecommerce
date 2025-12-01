@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account – PeakRide</title>
+  <meta name="description" content="View your PeakRide account, order history, and saved templates.">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <!-- Header Navigation -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">PEAKRIDE</div>
+        
+        <nav class="nav-main">
+          <li><a href="/index.html">Home</a></li>
+          <li><a href="/bikes.html">Bikes</a></li>
+          <li><a href="/customize.html">Customize</a></li>
+          <li><a href="/cart.html">Cart</a></li>
+        </nav>
+        
+        <div class="header-actions">
+          <div class="search-icon" role="button" tabindex="0" aria-label="Search">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </div>
+          
+          <div style="position: relative;">
+            <a href="/cart.html" class="cart-icon" aria-label="View cart">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+            </a>
+            <div class="cart-badge" style="display: none;">0</div>
+          </div>
+        </div>
+        
+        <button class="nav-toggle" aria-label="Toggle navigation menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <div class="container py-2xl">
+    <h1 style="margin-bottom: 2rem;">My Account</h1>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+      <!-- Order History -->
+      <div style="border: 1px solid #333; padding: 2rem;">
+        <h2 style="margin-bottom: 1.5rem;">Recent Orders</h2>
+        <div id="orders-container">
+          <p style="color: #a0a0a0;">No orders yet. <a href="/bikes.html">Start shopping</a>!</p>
+        </div>
+      </div>
+
+      <!-- Saved Templates -->
+      <div style="border: 1px solid #333; padding: 2rem;">
+        <h2 style="margin-bottom: 1.5rem;">Saved Templates</h2>
+        <div id="templates-container">
+          <p style="color: #a0a0a0;">No saved templates yet. <a href="/customize.html">Create one</a>!</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="border: 1px solid #333; padding: 2rem;">
+      <h2 style="margin-bottom: 1.5rem;">Account Settings</h2>
+      <button class="btn" onclick="clearAllData()">Clear Cart & History</button>
+      <p style="color: #a0a0a0; margin-top: 1rem; font-size: 0.875rem;">This will clear your shopping cart, order history, and saved templates.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="/bikes.html">All Bikes</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Customize</h4>
+          <ul>
+            <li><a href="/customize.html">Build Your Bike</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Account</h4>
+          <ul>
+            <li><a href="/account.html">My Account</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2025 PeakRide. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/app.js"></script>
+  <script src="/js/cart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Load orders
+      const orders = JSON.parse(localStorage.getItem('peakride_orders') || '[]');
+      const ordersContainer = document.getElementById('orders-container');
+      
+      if (orders.length > 0) {
+        ordersContainer.innerHTML = orders.map((order, i) => `
+          <div style="padding: 1rem 0; border-bottom: 1px solid #333;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <strong>Order #${i + 1}</strong>
+              <span style="color: #a0a0a0; font-size: 0.875rem;">${new Date(order.orderedAt).toLocaleDateString()}</span>
+            </div>
+            <p style="color: #a0a0a0; font-size: 0.875rem; margin: 0.25rem 0;">${order.customer.name}</p>
+            <p style="font-weight: 600;">${order.total}</p>
+          </div>
+        `).join('');
+      }
+
+      // Load templates
+      const templates = JSON.parse(localStorage.getItem('peakride_templates') || '[]');
+      const templatesContainer = document.getElementById('templates-container');
+      
+      if (templates.length > 0) {
+        templatesContainer.innerHTML = templates.map((template, i) => `
+          <div style="padding: 1rem 0; border-bottom: 1px solid #333;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <strong>${template.productName}</strong>
+                <p style="color: #a0a0a0; font-size: 0.875rem; margin: 0.25rem 0;">Frame: ${template.customizations.frame || 'Default'}</p>
+              </div>
+              <a href="/customize.html" style="color: #a0a0a0; text-decoration: underline; font-size: 0.875rem;">Use</a>
+            </div>
+          </div>
+        `).join('');
+      }
+    });
+
+    function clearAllData() {
+      if (confirm('Are you sure? This will clear your cart, order history, and templates.')) {
+        localStorage.removeItem('peakride_cart');
+        localStorage.removeItem('peakride_orders');
+        localStorage.removeItem('peakride_templates');
+        alert('Data cleared!');
+        location.reload();
+      }
+    }
+  </script>
+</body>
+</html>

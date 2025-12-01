@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mountain Bikes Catalog – PeakRide</title>
+  <meta name="description" content="Browse PeakRide's complete catalog of premium mountain bikes. Filter by type, price, wheel size, and more.">
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    /* Catalog-specific styles */
+    .catalog-wrapper {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .catalog-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .filters-panel {
+      border: 1px solid #333;
+      padding: 2rem;
+      height: fit-content;
+      position: sticky;
+      top: 80px;
+    }
+
+    .filter-section {
+      margin-bottom: 2rem;
+    }
+
+    .filter-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .filter-section h4 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+
+    .filter-option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      cursor: pointer;
+    }
+
+    .filter-option input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin-right: 0.75rem;
+      cursor: pointer;
+    }
+
+    .filter-option label {
+      margin: 0;
+      font-size: 0.875rem;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .price-range-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .price-range-input {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .price-range-input input {
+      flex: 1;
+      padding: 0.5rem;
+    }
+
+    .price-range-display {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .catalog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #333;
+      margin-bottom: 2rem;
+    }
+
+    .catalog-controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .sort-select {
+      padding: 0.5rem 1rem;
+    }
+
+    .active-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .filter-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: #333;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      border-radius: 0;
+    }
+
+    .filter-badge button {
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0;
+    }
+
+    .products-container {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Navigation -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">PEAKRIDE</div>
+        
+        <nav class="nav-main">
+          <li><a href="/index.html">Home</a></li>
+          <li><a href="/bikes.html">Bikes</a></li>
+          <li><a href="/customize.html">Customize</a></li>
+          <li><a href="/cart.html">Cart</a></li>
+        </nav>
+        
+        <div class="header-actions">
+          <div class="search-icon" role="button" tabindex="0" aria-label="Search">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </div>
+          
+          <div style="position: relative;">
+            <a href="/cart.html" class="cart-icon" aria-label="View cart">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+            </a>
+            <div class="cart-badge" style="display: none;">0</div>
+          </div>
+        </div>
+        
+        <button class="nav-toggle" aria-label="Toggle navigation menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <div class="container py-2xl">
+    <h1 style="margin-bottom: 1rem;">All Bikes</h1>
+    
+    <div class="catalog-wrapper">
+      <!-- Filters Panel -->
+      <aside class="filters-panel">
+        <h3 style="margin-bottom: 1.5rem; font-size: 1rem;">Filters</h3>
+        
+        <!-- Type Filter -->
+        <div class="filter-section">
+          <h4>Bike Type</h4>
+          <div id="type-filters"></div>
+        </div>
+
+        <!-- Wheel Size Filter -->
+        <div class="filter-section">
+          <h4>Wheel Size</h4>
+          <div id="wheel-filters"></div>
+        </div>
+
+        <!-- Price Range Filter -->
+        <div class="filter-section">
+          <h4>Price Range</h4>
+          <div class="price-range-container">
+            <div class="price-range-display" id="price-display">$0 – $5,000</div>
+            <div class="price-range-input">
+              <input type="range" id="price-min" min="0" max="5000" value="0" step="100">
+            </div>
+            <div class="price-range-input">
+              <input type="range" id="price-max" min="0" max="5000" value="5000" step="100">
+            </div>
+          </div>
+        </div>
+
+        <!-- Brand Filter -->
+        <div class="filter-section">
+          <h4>Brand</h4>
+          <div id="brand-filters"></div>
+        </div>
+
+        <button class="btn" style="width: 100%; margin-top: 1rem;" id="reset-filters">Reset All</button>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="products-container">
+        <!-- Catalog Controls -->
+        <div class="catalog-header">
+          <div id="results-count">Showing 6 bikes</div>
+          <div class="catalog-controls">
+            <label for="sort-select" class="sr-only">Sort by</label>
+            <select id="sort-select" class="sort-select" data-sort>
+              <option value="newest">Newest</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Active Filters Display -->
+        <div class="active-filters" id="active-filters-display"></div>
+
+        <!-- Products Grid -->
+        <div class="products-grid grid grid-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="/bikes.html">All Bikes</a></li>
+            <li><a href="/bikes/trail.html">Trail Bikes</a></li>
+            <li><a href="/bikes/enduro.html">Enduro Bikes</a></li>
+            <li><a href="/bikes/cross-country.html">XC Bikes</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Customize</h4>
+          <ul>
+            <li><a href="/customize.html">Build Your Bike</a></li>
+            <li><a href="/customize.html">Component Options</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Account</h4>
+          <ul>
+            <li><a href="/account.html">My Profile</a></li>
+            <li><a href="/cart.html">Shopping Cart</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2025 PeakRide. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/app.js"></script>
+  <script src="/js/cart.js"></script>
+  <script src="/js/catalog.js"></script>
+  <script>
+    // Catalog page initialization with filters
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const response = await fetch('/data/products.json');
+        const products = await response.json();
+
+        // Extract unique values for filters
+        const types = [...new Set(products.map(p => p.type))].sort();
+        const wheels = [...new Set(products.map(p => p.wheel_size))].sort((a, b) => a - b);
+        const brands = [...new Set(products.map(p => p.brand))].sort();
+
+        // Render type filters
+        const typeFiltersContainer = document.getElementById('type-filters');
+        typeFiltersContainer.innerHTML = types.map(type => `
+          <div class="filter-option">
+            <input type="checkbox" id="filter-type-${type}" value="${type}" class="filter-checkbox" data-filter="type">
+            <label for="filter-type-${type}">${type}</label>
+          </div>
+        `).join('');
+
+        // Render wheel size filters
+        const wheelFiltersContainer = document.getElementById('wheel-filters');
+        wheelFiltersContainer.innerHTML = wheels.map(wheel => `
+          <div class="filter-option">
+            <input type="checkbox" id="filter-wheel-${wheel}" value="${wheel}" class="filter-checkbox" data-filter="wheelSize">
+            <label for="filter-wheel-${wheel}">${wheel}in</label>
+          </div>
+        `).join('');
+
+        // Render brand filters
+        const brandFiltersContainer = document.getElementById('brand-filters');
+        brandFiltersContainer.innerHTML = brands.map(brand => `
+          <div class="filter-option">
+            <input type="checkbox" id="filter-brand-${brand}" value="${brand}" class="filter-checkbox" data-filter="brand">
+            <label for="filter-brand-${brand}">${brand}</label>
+          </div>
+        `).join('');
+
+        // Setup filter event listeners
+        const filterCheckboxes = document.querySelectorAll('.filter-checkbox');
+        const priceMinInput = document.getElementById('price-min');
+        const priceMaxInput = document.getElementById('price-max');
+        const sortSelect = document.getElementById('sort-select');
+        const resetButton = document.getElementById('reset-filters');
+
+        const updateFilters = () => {
+          const activeFilters = {
+            type: Array.from(document.querySelectorAll('input[data-filter="type"]:checked')).map(cb => cb.value),
+            wheelSize: Array.from(document.querySelectorAll('input[data-filter="wheelSize"]:checked')).map(cb => cb.value),
+            priceRange: [parseInt(priceMinInput.value), parseInt(priceMaxInput.value)],
+            brand: Array.from(document.querySelectorAll('input[data-filter="brand"]:checked')).map(cb => cb.value),
+          };
+
+          // Filter products
+          let filtered = products.filter(p => {
+            if (activeFilters.type.length > 0 && !activeFilters.type.includes(p.type)) return false;
+            if (activeFilters.wheelSize.length > 0 && !activeFilters.wheelSize.includes(String(p.wheel_size))) return false;
+            if (p.price < activeFilters.priceRange[0] || p.price > activeFilters.priceRange[1]) return false;
+            if (activeFilters.brand.length > 0 && !activeFilters.brand.includes(p.brand)) return false;
+            return true;
+          });
+
+          // Sort products
+          const sort = sortSelect.value;
+          if (sort === 'price-low') filtered.sort((a, b) => a.price - b.price);
+          if (sort === 'price-high') filtered.sort((a, b) => b.price - a.price);
+
+          // Render products
+          const grid = document.querySelector('.products-grid');
+          grid.innerHTML = filtered.map(product => `
+            <div class="product-card">
+              <div class="product-image">
+                <img src="${product.images[0]}" alt="${product.name}" loading="lazy">
+              </div>
+              <div class="product-info">
+                <span class="product-type">${product.type}</span>
+                <h3 class="product-name">${product.name}</h3>
+                <div class="product-price">$${product.price.toLocaleString()}</div>
+                <div class="product-actions">
+                  <a href="/product.html?id=${product.id}" class="btn btn-secondary btn-small">Quick View</a>
+                  <a href="/customize.html?id=${product.id}" class="btn btn-small">Customize</a>
+                </div>
+              </div>
+            </div>
+          `).join('');
+
+          // Update results count
+          document.getElementById('results-count').textContent = `Showing ${filtered.length} bike${filtered.length !== 1 ? 's' : ''}`;
+
+          // Display active filters
+          const activeFiltersBadges = [];
+          activeFilters.type.forEach(t => activeFiltersBadges.push({ type: 'Type', value: t, filter: 'type', id: t }));
+          activeFilters.wheelSize.forEach(w => activeFiltersBadges.push({ type: 'Wheel', value: `${w}in`, filter: 'wheelSize', id: w }));
+          activeFilters.brand.forEach(b => activeFiltersBadges.push({ type: 'Brand', value: b, filter: 'brand', id: b }));
+
+          const badgesContainer = document.getElementById('active-filters-display');
+          badgesContainer.innerHTML = activeFiltersBadges.map(badge => `
+            <div class="filter-badge">
+              ${badge.value}
+              <button onclick="document.getElementById('filter-${badge.filter}-${badge.id}').checked = false; updateFilters();">✕</button>
+            </div>
+          `).join('');
+        };
+
+        // Update price display
+        const updatePriceDisplay = () => {
+          const min = parseInt(priceMinInput.value);
+          const max = parseInt(priceMaxInput.value);
+          if (min > max) priceMinInput.value = max;
+          document.getElementById('price-display').textContent = `$${min.toLocaleString()} – $${parseInt(priceMaxInput.value).toLocaleString()}`;
+          updateFilters();
+        };
+
+        filterCheckboxes.forEach(checkbox => checkbox.addEventListener('change', updateFilters));
+        priceMinInput.addEventListener('change', updatePriceDisplay);
+        priceMaxInput.addEventListener('change', updatePriceDisplay);
+        sortSelect.addEventListener('change', updateFilters);
+
+        resetButton.addEventListener('click', () => {
+          filterCheckboxes.forEach(cb => cb.checked = false);
+          priceMinInput.value = 0;
+          priceMaxInput.value = 5000;
+          updateFilters();
+          updatePriceDisplay();
+        });
+
+        // Initial render
+        updateFilters();
+      } catch (error) {
+        console.error('[v0] Error loading catalog:', error);
+      }
+    });
+
+    // Make updateFilters accessible globally for badge removal
+    function updateFilters() {
+      const event = new Event('change');
+      document.getElementById('sort-select').dispatchEvent(event);
+    }
+  </script>
+</body>
+</html>

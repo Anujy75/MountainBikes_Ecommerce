@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart – PeakRide</title>
+  <meta name="description" content="Review and checkout your PeakRide bike order.">
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    /* Cart-specific styles */
+    .cart-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 3rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      .cart-wrapper {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    .cart-empty {
+      text-align: center;
+      padding: 3rem 2rem;
+      border: 1px solid #333;
+    }
+
+    .cart-empty h2 {
+      margin-bottom: 1rem;
+    }
+
+    .cart-empty p {
+      color: #a0a0a0;
+      margin-bottom: 1.5rem;
+    }
+
+    .cart-items {
+      border: 1px solid #333;
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 120px 1fr auto;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      border-bottom: 1px solid #333;
+      align-items: start;
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
+    .cart-item-image {
+      width: 120px;
+      aspect-ratio: 1;
+      background-color: #333;
+      overflow: hidden;
+    }
+
+    .cart-item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cart-item-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .cart-item-name {
+      font-weight: 700;
+      font-size: 1.125rem;
+    }
+
+    .cart-item-type {
+      font-size: 0.875rem;
+      color: #a0a0a0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .cart-item-customizations {
+      font-size: 0.75rem;
+      color: #a0a0a0;
+      margin-top: 0.5rem;
+    }
+
+    .cart-item-customizations div {
+      margin: 0.25rem 0;
+    }
+
+    .cart-item-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid #333;
+      padding: 0.25rem;
+    }
+
+    .quantity-control button {
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      font-weight: 700;
+    }
+
+    .quantity-control input {
+      width: 40px;
+      border: none;
+      background-color: transparent;
+      text-align: center;
+      padding: 0;
+      font-weight: 600;
+    }
+
+    .cart-item-price {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .cart-item-price-value {
+      font-weight: 700;
+      font-size: 1.125rem;
+    }
+
+    .cart-item-unit-price {
+      font-size: 0.75rem;
+      color: #a0a0a0;
+    }
+
+    .cart-remove {
+      background: none;
+      border: none;
+      color: #a0a0a0;
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: 0.875rem;
+    }
+
+    .cart-remove:hover {
+      color: #fff;
+    }
+
+    .cart-summary {
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+      border: 1px solid #333;
+      padding: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      .cart-summary {
+        position: static;
+        width: 100%;
+        max-width: none;
+      }
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .summary-row.total {
+      border-top: 1px solid #333;
+      padding-top: 1rem;
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+
+    .summary-label {
+      color: #a0a0a0;
+    }
+
+    .summary-value {
+      font-weight: 600;
+    }
+
+    .checkout-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .checkout-modal.active {
+      display: flex;
+    }
+
+    .checkout-modal-content {
+      background-color: #000;
+      border: 1px solid #333;
+      max-width: 500px;
+      width: 100%;
+      padding: 2rem;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .checkout-modal-close {
+      float: right;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+
+    .checkout-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      clear: both;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .checkout-form .btn {
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .cart-wrapper {
+        gap: 1rem;
+      }
+
+      .cart-item {
+        grid-template-columns: 80px 1fr;
+        gap: 1rem;
+      }
+
+      .cart-item-image {
+        width: 80px;
+      }
+
+      .cart-item-actions {
+        grid-column: 1 / -1;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .cart-summary {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Navigation -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">PEAKRIDE</div>
+        
+        <nav class="nav-main">
+          <li><a href="/index.html">Home</a></li>
+          <li><a href="/bikes.html">Bikes</a></li>
+          <li><a href="/customize.html">Customize</a></li>
+          <li><a href="/cart.html">Cart</a></li>
+        </nav>
+        
+        <div class="header-actions">
+          <div class="search-icon" role="button" tabindex="0" aria-label="Search">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </div>
+          
+          <div style="position: relative;">
+            <a href="/cart.html" class="cart-icon" aria-label="View cart">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+            </a>
+            <div class="cart-badge" style="display: none;">0</div>
+          </div>
+        </div>
+        
+        <button class="nav-toggle" aria-label="Toggle navigation menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <div class="container py-2xl">
+    <h1 style="margin-bottom: 2rem;">Shopping Cart</h1>
+
+    <div class="cart-wrapper">
+      <!-- Cart Items -->
+      <div>
+        <div id="cart-items-container"></div>
+      </div>
+
+      <!-- Summary & Checkout -->
+      <div class="cart-summary">
+        <h3 style="margin-bottom: 1.5rem;">Order Summary</h3>
+        
+        <div class="summary-row">
+          <span class="summary-label">Subtotal</span>
+          <span class="summary-value" id="subtotal">$0.00</span>
+        </div>
+        
+        <div class="summary-row">
+          <span class="summary-label">Shipping</span>
+          <span class="summary-value" id="shipping">$0.00</span>
+        </div>
+        
+        <div class="summary-row">
+          <span class="summary-label">Tax (8%)</span>
+          <span class="summary-value" id="tax">$0.00</span>
+        </div>
+        
+        <div class="summary-row total">
+          <span>Total</span>
+          <span id="total">$0.00</span>
+        </div>
+
+        <button class="btn" style="width: 100%; margin-top: 1rem;" id="checkout-btn">Proceed to Checkout</button>
+        <a href="/bikes.html" class="btn btn-secondary" style="width: 100%; margin-top: 0.5rem; text-align: center; display: block;">Continue Shopping</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div class="checkout-modal" id="checkout-modal">
+    <div class="checkout-modal-content">
+      <button class="checkout-modal-close" onclick="closeCheckoutModal()">×</button>
+      <h2>Checkout</h2>
+      
+      <form class="checkout-form" id="checkout-form">
+        <div class="form-group">
+          <label for="customer-name">Full Name *</label>
+          <input type="text" id="customer-name" name="name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="customer-email">Email Address *</label>
+          <input type="email" id="customer-email" name="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="customer-phone">Phone Number</label>
+          <input type="tel" id="customer-phone" name="phone">
+        </div>
+
+        <div class="form-group">
+          <label for="customer-address">Street Address *</label>
+          <input type="text" id="customer-address" name="address" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label for="customer-city">City *</label>
+            <input type="text" id="customer-city" name="city" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="customer-state">State *</label>
+            <input type="text" id="customer-state" name="state" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="customer-zip">ZIP Code *</label>
+          <input type="text" id="customer-zip" name="zip" required>
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%;">Complete Order</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="/bikes.html">All Bikes</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2025 PeakRide. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/app.js"></script>
+  <script src="/js/cart.js"></script>
+  <script>
+    const TAX_RATE = 0.08;
+    const SHIPPING_THRESHOLD = 500;
+    const FLAT_SHIPPING = 29.99;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCart();
+      updateCheckoutModal();
+    });
+
+    function renderCart() {
+      const cartData = cart.getCart();
+      const container = document.getElementById('cart-items-container');
+
+      if (cartData.items.length === 0) {
+        container.innerHTML = `
+          <div class="cart-empty">
+            <h2>Your cart is empty</h2>
+            <p>Add some premium bikes to get started on your next adventure.</p>
+            <a href="/bikes.html" class="btn">Shop Bikes</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="cart-items">
+          ${cartData.items.map((item, index) => `
+            <div class="cart-item">
+              <div class="cart-item-image">
+                <img src="${item.images ? item.images[0] : '/placeholder.svg'}" alt="${item.name}" loading="lazy">
+              </div>
+              
+              <div class="cart-item-details">
+                <div class="cart-item-type">${item.id}</div>
+                <div class="cart-item-name">${item.name}</div>
+                ${item.custom && Object.keys(item.custom).length > 0 ? `
+                  <div class="cart-item-customizations">
+                    ${item.custom.frame ? `<div>Frame: ${item.custom.frame}</div>` : ''}
+                    ${item.custom.wheels ? `<div>Wheels: ${item.custom.wheels}</div>` : ''}
+                    ${item.custom.suspension ? `<div>Suspension: ${item.custom.suspension}</div>` : ''}
+                    ${item.custom.brakes ? `<div>Brakes: ${item.custom.brakes}</div>` : ''}
+                    ${item.custom.extras && item.custom.extras.length > 0 ? `<div>Extras: ${item.custom.extras.join(', ')}</div>` : ''}
+                  </div>
+                ` : ''}
+              </div>
+
+              <div class="cart-item-actions">
+                <div>
+                  <div class="quantity-control">
+                    <button onclick="updateQuantity(${index}, ${item.qty - 1})">−</button>
+                    <input type="text" value="${item.qty}" readonly>
+                    <button onclick="updateQuantity(${index}, ${item.qty + 1})">+</button>
+                  </div>
+                </div>
+
+                <div class="cart-item-price">
+                  <div class="cart-item-price-value">$${(item.price * item.qty).toLocaleString()}</div>
+                  <div class="cart-item-unit-price">$${item.price.toLocaleString()} each</div>
+                </div>
+
+                <button class="cart-remove" onclick="removeItem(${index})">Remove</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      updateSummary();
+    }
+
+    function updateQuantity(index, newQty) {
+      if (newQty < 1) {
+        removeItem(index);
+      } else {
+        cart.updateQuantity(index, newQty);
+        renderCart();
+      }
+    }
+
+    function removeItem(index) {
+      const cartData = cart.getCart();
+      const item = cartData.items[index];
+      cart.removeItem(item.id, item.custom);
+      renderCart();
+    }
+
+    function updateSummary() {
+      const subtotal = cart.getSubtotal();
+      const shipping = subtotal > SHIPPING_THRESHOLD ? 0 : FLAT_SHIPPING;
+      const tax = (subtotal + shipping) * TAX_RATE;
+      const total = subtotal + shipping + tax;
+
+      document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+      document.getElementById('shipping').textContent = shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`;
+      document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+      document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+    }
+
+    document.getElementById('checkout-btn').addEventListener('click', () => {
+      const cartData = cart.getCart();
+      if (cartData.items.length === 0) {
+        alert('Your cart is empty');
+        return;
+      }
+      document.getElementById('checkout-modal').classList.add('active');
+    });
+
+    function closeCheckoutModal() {
+      document.getElementById('checkout-modal').classList.remove('active');
+    }
+
+    document.getElementById('checkout-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const orderData = {
+        customer: {
+          name: formData.get('name'),
+          email: formData.get('email'),
+          phone: formData.get('phone'),
+          address: formData.get('address'),
+          city: formData.get('city'),
+          state: formData.get('state'),
+          zip: formData.get('zip')
+        },
+        cart: cart.getCart(),
+        total: document.getElementById('total').textContent,
+        orderedAt: new Date().toISOString()
+      };
+
+      // Save order to localStorage
+      const orders = JSON.parse(localStorage.getItem('peakride_orders') || '[]');
+      orders.push(orderData);
+      localStorage.setItem('peakride_orders', JSON.stringify(orders));
+
+      // Show success message
+      alert(`Order confirmed! Order #${orders.length} has been placed.\n\nThank you for your purchase, ${formData.get('name')}!\n\nA confirmation email will be sent to ${formData.get('email')}.`);
+
+      // Clear cart
+      cart.clear();
+      closeCheckoutModal();
+      renderCart();
+    });
+
+    function updateCheckoutModal() {
+      // Placeholder for any modal updates needed
+    }
+  </script>
+</body>
+</html>

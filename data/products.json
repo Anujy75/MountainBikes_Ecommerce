@@ -6,7 +6,7 @@
     "brand": "PeakRide",
     "wheel_size": 29,
     "price": 2499,
-    "images": ["/images/scout-1.jpg", "/images/scout-2.jpg", "/images/scout-3.jpg"],
+    "images": ["https://off.road.cc/sites/default/files/styles/970wide/public/thumbnails/image/2022%20canyon%20spectral%20125%20rear%203q.jpg?itok=Rd-AoY9D", "./mountain.jpg", "./mountain.jpg"],
     "specs": {
       "Frame": "Alloy 6061, 430g",
       "Fork": "120mm Travel, Lockout",
